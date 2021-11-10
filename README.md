@@ -1,4 +1,4 @@
-# HomeWork 19 "Online/Offline Budget Trackers"
+# HomeWork 19 "Online/Offline Budget Tracker"
 
 ## Project Description
 In this project, we need to add functionality to a Budget Tracker application in order to allow the user to use the app even when they are offline.
