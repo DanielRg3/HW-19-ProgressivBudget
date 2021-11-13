@@ -1,15 +1,17 @@
 const FILES_TO_CACHE = [
     "/",
-    "index.js",
+    "/index.html",
+    "/index.js",
     "/manifest.webmanifest",
-    "/assets/js/db.js",
-    "/assets/js/index.js",
+    "/db.js",
     "/icons/icon-192x192.png",
     "/icons/icon-512x512.png",
+    "/service-worker.js",
+    "/styles.css",
 ];
 
-const CACH_NAME = "static-cache-v2";
-const DATA_CACH_NAME = "data-cache-v1";
+const CACHE_NAME = "static-cache-v2";
+const DATA_CACHE_NAME = "data-cache-v1";
 
 self.addEventListener("install", function(evt) {
     evt.waitUntil(
@@ -23,9 +25,9 @@ self.addEventListener("install", function(evt) {
 
 self.addEventListener("activate", function(evt) {
     evt.waitUntil(
-        caches.keys().then((keyLists) => {
+        caches.keys().then((keyList) => {
             return Promise.all(keyList.map((key) => {
-                if (key !== CACHE_NAME && Key !== DATA_CACHE_NAME) {
+                if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
                     console.log("Removing old cache data", key);
                     return caches.delete(key);
                 }

@@ -1,11 +1,10 @@
 let db;
-let budgetVersion;
 
-const request = indexedDB.open("BudgetDB", budgetVersion || 1);
+const request = indexedDB.open("BudgetDB", 1);
 
 request.onupgradeneeded = function(e) {
     const db = e.target.result
-    db.createObjectStore("pending", {autoIncrement: true})
+    db.createObjectStore("requestStore", {autoIncrement: true})
 };
 
 request.onerror = function(e) {
@@ -20,8 +19,8 @@ request.onsuccess = function(e) {
 };
 
 function checkDatabase() {
-    let transaction = db.transaction(['BudgetStore'], 'readwrite');
-    const store = transaction.createObjectStore('BudgetStore');
+    let transaction = db.transaction(['requestStore'], 'readwrite');
+    const store = transaction.objectStore('requestStore');
     const getAll = store.getAll();
 
     getAll.onsuccess = function() {
@@ -35,14 +34,20 @@ function checkDatabase() {
                 }
             }).then((response) => response.json())
             .then((res) => {
-                if(res.lenth !== 0) {
-                    transaction = db.transaction(['BudgetStore'], 'readwrite');
-                    const currentStore = transaction.objectStore("BudgetStore");
+                if(res.length !== 0) {
+                    transaction = db.transaction(['requestStore'], 'readwrite');
+                    const currentStore = transaction.objectStore("requestStore");
                     currentStore.clear();
                 }
             })
         }
     }
+}
+
+function saveRecord(transaction) {
+    let request = db.transaction(['requestStore'], 'readwrite');
+    const store = request.objectStore('requestStore');
+    store.add(transaction);
 }
 
 window.addEventListener("online", checkDatabase);
