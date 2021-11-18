@@ -1,9 +1,11 @@
+const indexedDb = window.indexedDB;
+
 let db;
 
 const request = indexedDB.open("BudgetDB", 1);
 
 request.onupgradeneeded = function(e) {
-    const db = e.target.result
+    let db = e.target.result
     db.createObjectStore("requestStore", {autoIncrement: true})
 };
 
@@ -12,7 +14,7 @@ request.onerror = function(e) {
 };
 
 request.onsuccess = function(e) {
-    db=e.target.result;
+    db = e.target.result;
     if(navigator.onLine) {
         checkDatabase();
     };
@@ -30,12 +32,12 @@ function checkDatabase() {
                 body: JSON.stringify(getAll.result),
                 headers: {
                     Accept: "application/json, text/plain, */*",
-                    "Concept-Type" : "appliation/json"
+                    "Content-Type" : "application/json"
                 }
             }).then((response) => response.json())
-            .then((res) => {
-                if(res.length !== 0) {
-                    transaction = db.transaction(['requestStore'], 'readwrite');
+            .then((response) => {
+                if(response.length !== 0) {
+                    const transaction = db.transaction(['requestStore'], 'readwrite');
                     const currentStore = transaction.objectStore("requestStore");
                     currentStore.clear();
                 }
