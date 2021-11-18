@@ -1,4 +1,9 @@
-const indexedDb = window.indexedDB;
+const indexedDB =
+  window.indexedDB ||
+  window.mozIndexedDB ||
+  window.webkitIndexedDB ||
+  window.msIndexedDB ||
+  window.shimIndexedDB;
 
 let db;
 
