@@ -26,7 +26,7 @@ request.onsuccess = function(e) {
 };
 
 function checkDatabase() {
-    let transaction = db.transaction(['requestStore'], 'readwrite');
+    const transaction = db.transaction(['requestStore'], 'readwrite');
     const store = transaction.objectStore('requestStore');
     const getAll = store.getAll();
 
